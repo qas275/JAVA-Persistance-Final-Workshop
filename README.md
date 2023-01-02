@@ -1,11 +1,11 @@
 # FINAL WORKSHOP
-Contains all SQL, Mongo and PYP workshops (final task maybe incomplete but queries are up)
-**TODO >>> UP REDIS**
+In general this repository contains all SQL, Mongo and PYP workshops for NUS JAVA Web Appplication Development Course (Persistence)\ 
+Read further below for instructions on deployment to Railway\
 
-## Setup for Railway Deployment
-Variables in application properties are not sent to railway, any variables set there during local run are to be set again in railway environment variables.
+**FUTURE TODOS**\
+Implement Redis
 
-### Railway
+## Railway
 **Code**\
 Ensure pom.xml java version 18
 Put Dockerfile on root of project
@@ -20,7 +20,7 @@ Create new empty service
 Provision new empty, mySQL and mongo service
 Take connection details for all services and proceed with steps below for mySQL and MongoDB and return here
 
-***RETURN TO THIS POINT AFTER SETTING UP MYSQL AND MONGO***\
+**RETURN TO THIS POINT AFTER SETTING UP MYSQL AND MONGO**\
 Application Properties for Local Run --> not pushed to Railway
 
 ```
@@ -50,7 +50,7 @@ Generate domain
 Test application online
 Debug with deployment logs on Railway
 
-### mySQL
+## mySQL
 **Sample mySQL connection details from Railway**\
 mysql://root:asdadsadadsad@containers-us-west-1.railway.app:1234/railway
 mysql://<user>:<password>@<host>:<port>/<database>
@@ -80,7 +80,7 @@ Select user from mysql.user; //check for successful creation
 Take connection details of host and port from Railway as seen from above sample
 
 
-### MongoDB
+## MongoDB
 **Sample mongo connection details from Railway**\
 mongodb://mongo:asdasdasdasd@containers-us-west-1.railway.app:1234
 mongodb://<user>:<password>@<host>:<port>
