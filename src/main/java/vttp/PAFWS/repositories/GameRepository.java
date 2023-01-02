@@ -1,9 +1,14 @@
 package vttp.PAFWS.repositories;
 
+import java.util.Arrays;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
+import org.bson.BsonNull;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -18,6 +23,9 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
+import com.mongodb.client.AggregateIterable;
+import com.mongodb.client.model.Aggregates;
+import com.mongodb.client.model.Sorts;
 import com.mongodb.client.result.UpdateResult;
 
 @Repository
@@ -112,5 +120,91 @@ public class GameRepository {
         AggregationResults<Document> results = mongoTemplate.aggregate(pipeline, BG_C_GAMES, Document.class);
         return results.getMappedResults().get(0);
     }
+
+    public List<Document> highestRating(){
+        // if this separate document does not work, convert to one big document
+        List<Document> pipeline = Arrays.asList(
+            new Document("$sort",new Document("gid",1)
+                .append("rating", -1)
+            ),
+            new Document("$group", new Document("_id", "$gid")
+                .append("rating", new Document("$max","$rating"))
+                .append("user", new Document("$first","$user"))
+                .append("comments", new Document("$first","$c_text"))
+
+            ),
+            new Document("$sort",new Document("gid",1)
+                .append("rating", -1)
+                )
+        );
+
+
+        List<Document> lookup = Arrays.asList(
+            new Document("$lookup", 
+                new Document("from", "comments")
+                    .append("localField", "gid")
+                    .append("foreignField", "gid")
+                    .append("as", "Comments")
+                    .append("pipeline", pipeline)),
+                new Document("$project",new Document("_id","$gid")
+                    .append("name", "$name")
+                    .append("rating", new Document("$first","$Comments.rating"))
+                    .append("user", new Document("$first","$Comments.user"))
+                    .append("comments", new Document("$first","$Comments.comments"))
+                ),
+                new Document("$limit",2) //so far limit can go up to 300 but takes a min to load
+        );
+
+        AggregateIterable<Document> res = mongoTemplate.getCollection(BG_C_GAMES).aggregate(lookup);
+        List<Document> documents = new LinkedList<>();
+        for(Document doc :res){
+            documents.add(doc);
+        }
+        return documents;
+    }
+
+    public List<Document> lowestRating(){
+        // if this separate document does not work, convert to one big document
+        List<Document> pipeline = Arrays.asList(
+            new Document("$sort",new Document("gid",1)
+                .append("rating", 1)
+            ),
+            new Document("$group", new Document("_id", "$gid")
+                .append("rating", new Document("$min","$rating"))
+                .append("user", new Document("$first","$user"))
+                .append("comments", new Document("$first","$c_text"))
+
+            ),
+            new Document("$sort",new Document("gid",1)
+                .append("rating", 1)
+                )
+        );
+
+
+        List<Document> lookup = Arrays.asList(
+            new Document("$lookup", 
+                new Document("from", "comments")
+                    .append("localField", "gid")
+                    .append("foreignField", "gid")
+                    .append("as", "Comments")
+                    .append("pipeline", pipeline)),
+                new Document("$project",new Document("_id","$gid")
+                    .append("name", "$name")
+                    .append("rating", new Document("$first","$Comments.rating"))
+                    .append("user", new Document("$first","$Comments.user"))
+                    .append("comments", new Document("$first","$Comments.comments"))
+                ),
+                new Document("$limit",2) //so far limit can go up to 300 but takes a min to load
+        );
+
+        AggregateIterable<Document> res = mongoTemplate.getCollection(BG_C_GAMES).aggregate(lookup);
+        List<Document> documents = new LinkedList<>();
+        for(Document doc :res){
+            documents.add(doc);
+        }
+        return documents;
+    }
+
+    
 
 }

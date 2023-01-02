@@ -70,4 +70,14 @@ public class GameService {
         return game;
     }
 
+    public List<Document> getHighest(){
+        List<Document> docs = gameRepo.highestRating();
+        return docs;
+    }
+
+    public List<Document> getLowest(){
+        List<Document> docs = gameRepo.lowestRating();
+        return docs;
+    }
+
 }

@@ -3,6 +3,7 @@ package vttp.PAFWS.controllers;
 import java.util.Date;
 import java.util.List;
 
+import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -116,7 +117,7 @@ public class GamesRESTController {
         }
     }
 
-    @PutMapping(path = "/review/{review_id}")
+    @PutMapping(path = "/review/{review_id}") //63abe5797a94b28e9996b269
     public ResponseEntity<String> updateReview(@PathVariable String review_id, @RequestBody MultiValueMap<String, String> form){
         String comment = form.getFirst("comment");
         Integer rating = 0;
@@ -159,6 +160,48 @@ public class GamesRESTController {
         Game game = gameService.findGameReviews(gid);
         System.out.println(game.getReviews().get(0).getName());
         return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(Game.toJSONWithReview(game).toString());
+    }
+
+    @GetMapping(path = "/game/highest")
+    public ResponseEntity<String> highest(){
+        List<Document> docs = gameService.getHighest();
+        JsonArrayBuilder jab = Json.createArrayBuilder();
+        for(Document doc: docs){
+            System.out.println(doc);
+            JsonObjectBuilder job = Json.createObjectBuilder();
+            job.add("_id", doc.getInteger("_id"));
+            job.add("name", doc.getString("name"));
+            job.add("rating", doc.getInteger("rating", 0));
+            job.add("user", doc.getString("user"));
+            job.add("comment", doc.getString("comments"));
+            jab.add(job.build());
+        }
+        JsonObjectBuilder res = Json.createObjectBuilder();
+        res.add("rating", "highest");
+        res.add("games", jab.build());
+        res.add("timestamp", new Date().toString());
+        return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(res.build().toString());
+    }
+
+    @GetMapping(path = "/game/lowest")
+    public ResponseEntity<String> lowest(){
+        List<Document> docs = gameService.getLowest();
+        JsonArrayBuilder jab = Json.createArrayBuilder();
+        for(Document doc: docs){
+            System.out.println(doc);
+            JsonObjectBuilder job = Json.createObjectBuilder();
+            job.add("_id", doc.getInteger("_id"));
+            job.add("name", doc.getString("name"));
+            job.add("rating", doc.getInteger("rating", 0));
+            job.add("user", doc.getString("user"));
+            job.add("comment", doc.getString("comments"));
+            jab.add(job.build());
+        }
+        JsonObjectBuilder res = Json.createObjectBuilder();
+        res.add("rating", "lowest");
+        res.add("games", jab.build());
+        res.add("timestamp", new Date().toString());
+        return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(res.build().toString());
     }
 
 
