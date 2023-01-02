@@ -121,6 +121,19 @@ public class GameRepository {
         return results.getMappedResults().get(0);
     }
 
+    // db.games.aggregate([
+    //     {$lookup:
+    //         {
+    //             from:'comments',
+    //             foreignField:"gid",
+    //             localField:"gid",
+    //             as:"Comments",
+    //             pipeline:[{$sort:{gid:1, rating:-1}},{$group:{_id:"$gid", rating:{$max:"$rating"}, user:{$first:"$user"}, comments:{$first:"$c_text"}}},{$sort:{_id:1, rating:-1}}]
+    //         }
+    //     },
+    //     {$project:{_id:"$gid", name:"$name", rating:{$first:"$Comments.rating"}, user:{$first:"$Comments.user"},comments:{$first:"$Comments.comments"}}},
+    //     {$limit:30}
+    // ]);
     public List<Document> highestRating(){
         // if this separate document does not work, convert to one big document
         List<Document> pipeline = Arrays.asList(
