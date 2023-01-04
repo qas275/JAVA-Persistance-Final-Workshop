@@ -30,10 +30,13 @@ spring.datasource.username=root
 
 Environment Variables for Railway
 ```
-SPRING_DATASOURCE_URL = jdbc:mysql://root:asdasdasdasd@containers-us-west-1.railway.app:1234/railway
+SPRING_DATASOURCE_URL = jdbc:mysql://containers-us-west-1.railway.app:1234/railway 
 SPRING_DATASOURCE_USERNAME = root
 SPRING_DATA_MONGODB_URI = mongodb://mongo:asdasdadadasd@containers-us-west-1.railway.app:1234/<database>?authSource=admin 
 ```
+_For mySQL connections, if want to use user other than root in environment variables, need to specify username and password and change database from railway to another with permissions granted or leave blank_\
+_If want to login root, username does not need to be specified in environment variables for username or in connection details, only password is required_\
+_Connection details can only be set in one place, not both, if not will crash_\
 
 **Local Terminal**\
 Push to Railway
