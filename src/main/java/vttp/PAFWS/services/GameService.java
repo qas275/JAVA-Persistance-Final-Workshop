@@ -5,8 +5,11 @@ import java.util.List;
 
 import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import vttp.PAFWS.RedisConfig;
 import vttp.PAFWS.models.Game;
 import vttp.PAFWS.models.Review;
 import vttp.PAFWS.repositories.GameRepository;
@@ -16,6 +19,11 @@ public class GameService {
 
     @Autowired
     GameRepository gameRepo;
+
+    @Autowired
+    @Qualifier("redisconfig")
+    RedisTemplate<String, String> template;
+
     
 
     public List<Game> findAllGames(Integer skip, Integer limit){

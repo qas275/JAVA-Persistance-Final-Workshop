@@ -145,7 +145,6 @@ public class GameRepository {
                 )
         );
 
-
         List<Document> lookup = Arrays.asList(
             new Document("$lookup", 
                 new Document("from", "comments")

@@ -23,4 +23,14 @@ public class Queries {
     public static final String SQL_INSERT_USER = "insert into pafws.user(user_id, username, name) values(?,?,?)";
 
     public static final String SQL_INSERT_TASK = "insert into pafws.task(description, priority, due_date) values(?,?,?)";
+
+    public static final String SQL_GETALL_RSVPS = "select * from rsvp";
+
+    public static final String SQL_FIND_RSVP = "select * from RSVP where email=?";
+
+
+    public static final String SQL_INSERT_RSVP = "insert into rsvp(name, email, confirm_date, comments) values(?, ?, CURDATE(), ?);";
+
+    public static final String SQL_UPDATE_RSVP = "update rsvp set name = ? , comments = ? where email = ?;";
+    
 }

@@ -55,8 +55,8 @@ Debug with deployment logs on Railway
 
 ## mySQL
 **Sample mySQL connection details from Railway**\
-mysql://root:asdadsadadsad@containers-us-west-1.railway.app:1234/railway
-mysql://<user>:<password>@<host>:<port>/<database>
+mysql://root:asdadsadadsad@containers-us-west-1.railway.app:1234/railway \
+mysql://user:password@host:port/database
 
 **Setup schemas/databases on Railway mySQL and upload data**\
 ```
